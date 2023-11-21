@@ -5,6 +5,10 @@ import org.junit.jupiter.api.Test;
 import static com.gildedrose.ItemTypeConstants.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * GildedRoseTest class with unit test cases
+ * to test inventory update behaviour
+ */
 class GildedRoseTest {
 
 
@@ -12,7 +16,7 @@ class GildedRoseTest {
     GildedRose updateInventory(String name, int sellIn, int quality){
         Item[] items = new Item[]{new Item(name,sellIn,quality)};
         GildedRose app = new GildedRose(items);
-        app.updateQuality();
+        app.updateInventory();
         return app;
     }
 
@@ -31,7 +35,7 @@ class GildedRoseTest {
     }
 
     @Test
-    void testItemQualityDegradeWhenSellByDatePassed(){
+    void testItemQualityDegradePostSellByDate(){
         GildedRose app = updateInventory(DEXTERITY,0,20);
         assertEquals(-1,app.items[0].sellIn);
         assertEquals(18,app.items[0].quality);
@@ -47,7 +51,7 @@ class GildedRoseTest {
     }
 
     @Test
-    void testAgedBrieQualityUpgradeWhenSellByDatePassed(){
+    void testAgedBrieQualityUpgradePostSellByDate(){
         GildedRose app = updateInventory(AGED_BRIE,0,15);
         assertEquals(-1,app.items[0].sellIn);
         //assertEquals(16,app.items[0].quality);
@@ -69,6 +73,13 @@ class GildedRoseTest {
     }
 
     @Test
+    void testSulfurasLegendaryItemQualityPostSellByDate(){
+        GildedRose app = updateInventory(SULFURAS,-1,80);
+        assertEquals(-1,app.items[0].sellIn);
+        assertEquals(80,app.items[0].quality);
+    }
+
+    @Test
     void testBackstageQualityUpgradeWhenSellInMoreThan10(){
         GildedRose app = updateInventory(BACKSTAGE,15,45);
         assertEquals(14,app.items[0].sellIn);
@@ -76,35 +87,35 @@ class GildedRoseTest {
     }
 
     @Test
-    void testBackstageQualityUpgradeWhenSellInMoreThan5AndLessThan11(){
+    void testBackstageQualityUpgradeWhenSellInBetween5and10(){
         GildedRose app = updateInventory(BACKSTAGE,10,45);
         assertEquals(9,app.items[0].sellIn);
         assertEquals(47,app.items[0].quality);
     }
 
     @Test
-    void testBackstageQualityUpgradeWhenSellInLessThanOrEquals5(){
+    void testBackstageQualityUpgradeWhenSellInBetween0and5(){
         GildedRose app = updateInventory(BACKSTAGE,5,45);
         assertEquals(4,app.items[0].sellIn);
         assertEquals(48,app.items[0].quality);
     }
 
     @Test
-    void testBackstageQualityUpgradeWhenSellInMoreThan5AndLessThan11BoundedToMaxLimit(){
+    void testBackstageQualityUpgradeWhenSellInBetween0and5BoundedToMaxLimit(){
         GildedRose app = updateInventory(BACKSTAGE,2,50);
         assertEquals(1,app.items[0].sellIn);
         assertEquals(50,app.items[0].quality);
     }
 
     @Test
-    void testBackstageQualityUpgradeWhenSellInMoreThan5BoundedToMaxLimit(){
+    void testBackstageQualityUpgradeWhenSellInBetween5and10BoundedToMaxLimit(){
         GildedRose app = updateInventory(BACKSTAGE,6,50);
         assertEquals(5,app.items[0].sellIn);
         assertEquals(50,app.items[0].quality);
     }
 
     @Test
-    void testBackstageQualityDropWhenSellByDatePassed() {
+    void testBackstageQualityDropPostSellByDate() {
         GildedRose app = updateInventory(BACKSTAGE, 0, 45);
         assertEquals(-1, app.items[0].sellIn);
         assertEquals(0, app.items[0].quality);
@@ -125,7 +136,7 @@ class GildedRoseTest {
     }
 
     @Test
-    void testConjuredItemsQualityDegradeWhenSellByDatePassed(){
+    void testConjuredItemsQualityDegradePostSellByDate(){
         GildedRose app = updateInventory(CONJURED,0,10);
         assertEquals(-1,app.items[0].sellIn);
         assertEquals(6,app.items[0].quality);
